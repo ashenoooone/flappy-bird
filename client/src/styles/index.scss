@@ -1,0 +1,82 @@
+@use '../vendor/fonts/fonts.scss';
+@use './variables.scss' as *;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+  color: $dark-shade-75;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  margin: 0;
+}
+
+h1 {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  color: $dark-shade-100;
+  margin: 0;
+  line-height: 29px;
+}
+
+h2 {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 19px;
+  color: $dark-shade-100;
+  margin: 0;
+  line-height: 23px;
+}
+
+h3 {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  color: $dark-shade-100;
+  text-transform: uppercase;
+}
+
+.button {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  text-transform: uppercase;
+  color: #fff;
+  border-radius: 22px;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  outline: 0;
+  border: 0;
+  transition: opacity 0.2s linear;
+  position: relative;
+  &:hover {
+    opacity: 0.5;
+  }
+  &_default {
+    background: linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%);
+  }
+  &_transparent {
+    color: $purple;
+    background-color: #fff;
+    background: linear-gradient(#fff, #fff) padding-box,
+      linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%) border-box;
+    border: 2px solid transparent;
+  }
+}
+
+.input {
+  border: 1px solid rgba(31, 32, 65, 0.25);
+  border-radius: 4px;
+  padding: 12px 15px;
+}
