@@ -90,10 +90,30 @@ h3 {
     min-height: min-content;
     color: red;
   }
+  &__password-input-container {
+    position: relative;
+    &::before {
+      content: '';
+      background-image: url('../images/show.svg');
+      background-repeat: no-repeat;
+      right: 10px;
+      top: 13px;
+      background-position: center;
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      background-size: contain;
+      cursor: pointer;
+    }
+    &.no-view::before {
+      background-image: url('../images/hide.svg');
+    }
+  }
 }
 
 .input {
   border: 1px solid rgba(31, 32, 65, 0.25);
   border-radius: 4px;
-  padding: 12px 15px;
+  padding: 12px 30px 12px 15px;
+  width: 100%;
 }

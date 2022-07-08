@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Register.scss';
 import { Link } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
@@ -6,6 +6,13 @@ import { Formik, Form, Field } from 'formik';
 // пароль от 6 до 30 символов
 // имя пользователя от 4 до 30 символов
 const Register = () => {
+  const [isPasswordHiden, setIsPasswordHiden] = useState(true);
+  const onShowPasswordClick = (event) => {
+    if (!event.target.classList.contains('input')) {
+      event.target.classList.toggle('no-view');
+      setIsPasswordHiden(!isPasswordHiden);
+    }
+  };
   // начальные значения
   const initialValues = {
     email: '',
@@ -18,21 +25,19 @@ const Register = () => {
     if (!/.{4,255}@.{2,255}\..{2,255}/g.test(values.email)) {
       errors.email = 'Введите корректный адресс электронной почты.';
     }
-    if (!/\W{4,30}/.test(values.username)) {
+    if (!/^(?=[A-Za-z]).{4,30}/.test(values.username)) {
       errors.username =
-        'Имя пользователя должно быть длиннее 4 символов и короче 30';
+        'Имя пользователя должно быть длиннее 4 символов и короче 30 и в нем должна быть хотя бы одна буква.';
     }
-    if (
-      !/.{6,}/g.test(values.password) ||
-      !/\d{1,}/g.test(values.password) ||
-      !/[A-Z]{1,}/g.test(values.password) ||
-      !/[!@#$%^&*]{1,}/g.test(values.password)
-    ) {
-      errors.password = `Пароль не подходит следующим требованиям: 
-        *минимальная длина 6 символов.
-        *хотя бы одна заглавная буква.
-        *один специальный символ(!@#$%^&*).
-        *хотя бы одна цифра.`;
+    if (!/.{6,40}/g.test(values.password)) {
+      errors.password = 'Длина пароля должна составлять от 6 до 40 символов';
+    } else if (!/\d{1,}/g.test(values.password)) {
+      errors.password = 'В пароле должна быть хотя бы одна цифра';
+    } else if (!/[A-Z]{1,}/g.test(values.password)) {
+      errors.password = 'В пароле должна быть хотя бы одна заглавная буква';
+    } else if (!/[!@#$%^&*]{1,}/g.test(values.password)) {
+      errors.password =
+        'В пароле должен быть хотя бы один специальный символ (!@#$%^&*)';
     }
     return errors;
   };
@@ -65,16 +70,23 @@ const Register = () => {
                 name='username'
                 placeholder='Имя пользователя'
               />
-              <pre className='form__error' style={{ minHeight: 48 }}>
+              <pre className='form__error' style={{ minHeight: 72 }}>
                 {touched.username && errors.username}
               </pre>
-              <Field
-                type='password'
-                className='register__input input'
-                name='password'
-                placeholder='Пароль'
-              />
-              <pre className='form__error' style={{ minHeight: 120 }}>
+              <div
+                onClick={onShowPasswordClick}
+                className={`form__password-input-container ${
+                  !isPasswordHiden && 'no-view'
+                }`}
+              >
+                <Field
+                  type={`${isPasswordHiden ? 'password' : 'text'}`}
+                  className='register__input input'
+                  name='password'
+                  placeholder='Пароль'
+                />
+              </div>
+              <pre className='form__error' style={{ minHeight: 48 }}>
                 {touched.password && errors.password}
               </pre>
               <button
