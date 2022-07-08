@@ -6,7 +6,7 @@ const Login = () => {
     <section className='login'>
       <div className='login__container'>
         <h1 className='login__title'>Войти</h1>
-        <form className='login__form'>
+        <form className='login__form form'>
           <input
             type='email'
             className='login__input input'
@@ -22,7 +22,9 @@ const Login = () => {
             className='login__input input'
             placeholder='Пароль'
           />
-          <button className='button button_default'>Войти</button>
+          <button type='submit' className='button button_default'>
+            Войти
+          </button>
         </form>
         <div className='login__no-account'>
           <p className='login__text'>Нет аккаунта на Toxin?</p>

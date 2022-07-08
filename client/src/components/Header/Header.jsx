@@ -9,10 +9,10 @@ const Header = () => {
       <div className='header__wrapper'>
         <img src={Logo} className='header__logo' alt='логотип' />
         <div className='header__buttons'>
-          <Link to='/' className='button button_transparent'>
+          <Link to='/login' className='button button_transparent'>
             Авторизация
           </Link>
-          <Link to='/' className='button button_default'>
+          <Link to='/register' className='button button_default'>
             Регистрация
           </Link>
         </div>

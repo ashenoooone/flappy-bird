@@ -73,6 +73,23 @@ h3 {
       linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%) border-box;
     border: 2px solid transparent;
   }
+  &_inactive {
+    pointer-events: none;
+    cursor: not-allowed;
+    background: $dark-shade-25;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  &__error {
+    white-space: pre-wrap;
+    margin: 0;
+    min-height: min-content;
+    color: red;
+  }
 }
 
 .input {
