@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import './Register.scss';
 import { Link } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../../store/slices/thunks/userRegisterThunk';
 // почта
 // пароль от 6 до 30 символов
 // имя пользователя от 4 до 30 символов
 const Register = () => {
   const [isPasswordHiden, setIsPasswordHiden] = useState(true);
+  const dispatch = useDispatch();
   const onShowPasswordClick = (event) => {
     if (!event.target.classList.contains('input')) {
       event.target.classList.toggle('no-view');
@@ -27,7 +30,7 @@ const Register = () => {
     }
     if (!/^(?=[A-Za-z]).{4,30}/.test(values.username)) {
       errors.username =
-        'Имя пользователя должно быть длиннее 4 символов и короче 30 и в нем должна быть хотя бы одна буква.';
+        'Длина имени пользователя 4-30 символов, быть хотя бы одна буква.';
     }
     if (!/.{6,40}/g.test(values.password)) {
       errors.password = 'Длина пароля должна составлять от 6 до 40 символов';
@@ -51,6 +54,7 @@ const Register = () => {
           validate={validate}
           onSubmit={(values) => {
             console.log(values);
+            dispatch(registerUser(values));
           }}
         >
           {({ errors, touched, isValid, dirty }) => (
@@ -63,15 +67,6 @@ const Register = () => {
               />
               <pre className='form__error' style={{ minHeight: 24 }}>
                 {touched.email && errors.email}
-              </pre>
-              <Field
-                type='text'
-                className='register__input input'
-                name='username'
-                placeholder='Имя пользователя'
-              />
-              <pre className='form__error' style={{ minHeight: 72 }}>
-                {touched.username && errors.username}
               </pre>
               <div
                 onClick={onShowPasswordClick}
@@ -89,6 +84,15 @@ const Register = () => {
               <pre className='form__error' style={{ minHeight: 48 }}>
                 {touched.password && errors.password}
               </pre>
+              <Field
+                type='text'
+                className='register__input input'
+                name='username'
+                placeholder='Имя пользователя'
+              />
+              <pre className='form__error' style={{ minHeight: 48 }}>
+                {touched.username && errors.username}
+              </pre>
               <button
                 type='submit'
                 className={`button button_default ${
@@ -101,7 +105,7 @@ const Register = () => {
           )}
         </Formik>
         <div className='register__no-account'>
-          <p className='register__text'>Есть аккаунт на Toxin?</p>
+          <p className='register__text'>Есть аккаунт?</p>
           <Link to='/login' className='button button_transparent'>
             Войти
           </Link>

@@ -27,7 +27,7 @@ const Login = () => {
           </button>
         </form>
         <div className='login__no-account'>
-          <p className='login__text'>Нет аккаунта на Toxin?</p>
+          <p className='login__text'>Нет аккаунта?</p>
           <Link to='/register' className='button button_transparent'>
             Создать
           </Link>

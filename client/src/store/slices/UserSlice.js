@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { registerUser } from './thunks/userRegisterThunk';
 
 const UserSlice = createSlice({
   name: 'user',
@@ -6,6 +7,8 @@ const UserSlice = createSlice({
     username: '',
     email: '',
     score: 0,
+    isLoading: false,
+    error: '',
   },
   reducers: {
     addUser(state, action) {
@@ -23,6 +26,23 @@ const UserSlice = createSlice({
     },
     updateScore(state, action) {
       state.score = action.payload.score;
+    },
+  },
+  extraReducers: {
+    [registerUser.pending]: (state, action) => {
+      state.isLoading = true;
+      state.error = '';
+    },
+    [registerUser.fulfilled]: (state, action) => {
+      state.error = '';
+      state.isLoading = false;
+      state.email = action.payload.email;
+      state.username = action.payload.username;
+      state.score = action.payload.score;
+    },
+    [registerUser.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload.error;
     },
   },
 });

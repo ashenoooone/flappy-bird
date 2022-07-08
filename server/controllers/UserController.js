@@ -25,7 +25,12 @@ class UserController {
       );
     }
     const hashPassword = await bcrypt.hash(password, 5);
-    const user = await User.create({ email, password: hashPassword });
+    const user = await User.create({
+      email,
+      password: hashPassword,
+      username,
+      score: 0,
+    });
   }
 
   async login(req, res, next) {
@@ -47,7 +52,7 @@ class UserController {
         expiresIn: '24h',
       }
     );
-    return res.json({ token });
+    return res.json({ token, username: user.username, email: user.email });
   }
 
   async check(req, res) {
