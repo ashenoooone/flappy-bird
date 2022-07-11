@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../store/slices/thunks/userLoginThunk';
 import './Login.scss';
+
 const Login = () => {
+  const error = useSelector((state) => state.user.error);
+  const jwt = localStorage.getItem('jwt');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const onEmailChange = (e) => {
@@ -15,9 +19,10 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password }));
+    await dispatch(loginUser({ email, password }));
+    navigate('/');
   };
 
   return (
@@ -41,6 +46,9 @@ const Login = () => {
             value={password}
             required
           />
+          <pre className='form__error' style={{ minHeight: 48 }}>
+            {error}
+          </pre>
           <button type='submit' className='button button_default'>
             Войти
           </button>

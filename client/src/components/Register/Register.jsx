@@ -64,6 +64,7 @@ const Register = () => {
                 className='register__input input'
                 placeholder='Почта'
                 name='email'
+                required
               />
               <pre className='form__error' style={{ minHeight: 24 }}>
                 {touched.email && errors.email}
@@ -79,6 +80,7 @@ const Register = () => {
                   className='register__input input'
                   name='password'
                   placeholder='Пароль'
+                  required
                 />
               </div>
               <pre className='form__error' style={{ minHeight: 48 }}>
@@ -89,6 +91,7 @@ const Register = () => {
                 className='register__input input'
                 name='username'
                 placeholder='Имя пользователя'
+                required
               />
               <pre className='form__error' style={{ minHeight: 48 }}>
                 {touched.username && errors.username}

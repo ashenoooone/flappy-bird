@@ -117,3 +117,26 @@ h3 {
   padding: 12px 30px 12px 15px;
   width: 100%;
 }
+
+.link {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-decoration: none;
+  color: $dark-shade-50;
+  position: relative;
+  &::before {
+    display: block;
+    content: attr(title);
+    font-weight: 700;
+    height: 1px;
+    color: transparent;
+    overflow: hidden;
+    visibility: hidden;
+  }
+  &_active {
+    font-weight: 700;
+    color: $dark-shade-75;
+  }
+}
