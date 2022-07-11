@@ -1,6 +1,7 @@
 const { User, Folder } = require('../models/model');
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
+const db = require('../db');
 const ApiError = require('../error/ApiError');
 require('dotenv').config();
 
@@ -46,7 +47,12 @@ class UserController {
       return next(ApiError.badRequest('Неправильный пароль.'));
     }
     const token = jsonwebtoken.sign(
-      { id: user.id, email: user.email },
+      {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        score: user.score,
+      },
       process.env.SECRET_KEY,
       {
         expiresIn: '24h',
@@ -57,6 +63,12 @@ class UserController {
 
   async check(req, res) {
     return res.json(req.user);
+  }
+
+  async getLeaders(req, res) {
+    const query = `SELECT id, email, username, password, score, "createdAt", "updatedAt" FROM public.users ORDER BY score DESC limit 5;`;
+    const users = await db.query(query);
+    return res.json(users);
   }
 }
 
