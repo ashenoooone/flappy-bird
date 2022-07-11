@@ -5,7 +5,8 @@
   box-sizing: border-box;
 }
 
-html {
+.page {
+  min-height: 100vh;
   font-family: 'Montserrat', Arial, Helvetica, sans-serif;
   color: $dark-shade-75;
   font-style: normal;
@@ -13,32 +14,94 @@ html {
   font-size: 14px;
   line-height: 24px;
   margin: 0;
-}
+  h1 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    margin: 0;
+    line-height: 29px;
+  }
 
-h1 {
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  color: $dark-shade-100;
-  margin: 0;
-  line-height: 29px;
-}
+  h2 {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    margin: 0;
+    line-height: 23px;
+  }
 
-h2 {
-  font-style: normal;
-  font-weight: 700;
-  font-size: 19px;
-  color: $dark-shade-100;
-  margin: 0;
-  line-height: 23px;
-}
+  h3 {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 15px;
+    text-transform: uppercase;
+  }
+  .container {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+  &_dark {
+    background-color: $dark-background;
+    color: $dark-text;
+    .container {
+      background-color: $dark-second;
+      // background-image: linear-gradient(#484e55, #3a3f44 60%, #313539);
+      border: 1px solid rgba(0, 0, 0, 0.6);
+      box-shadow: none;
+    }
+    .link {
+      color: $dark-text;
+    }
+    h1 {
+      color: $dark-text;
+    }
 
-h3 {
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 15px;
-  color: $dark-shade-100;
-  text-transform: uppercase;
+    h2 {
+      color: $dark-text;
+    }
+
+    h3 {
+      color: $dark-text;
+    }
+    .button {
+      &_transparent {
+        background: linear-gradient($dark-second, $dark-second) padding-box,
+          linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%) border-box;
+      }
+    }
+    .input {
+    }
+  }
+  &_light {
+    .container {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    h1 {
+      color: $dark-shade-100;
+    }
+
+    h2 {
+      color: $dark-shade-100;
+    }
+
+    h3 {
+      color: $dark-shade-100;
+    }
+
+    .link {
+      color: $dark-shade-50;
+      &_active {
+        font-weight: 700;
+        color: $dark-shade-75;
+      }
+    }
+  }
 }
 
 .button {
@@ -57,6 +120,7 @@ h3 {
   justify-content: center;
   height: 44px;
   outline: 0;
+  background-color: transparent;
   border: 0;
   transition: opacity 0.2s linear;
   position: relative;
@@ -68,7 +132,6 @@ h3 {
   }
   &_transparent {
     color: $purple;
-    background-color: #fff;
     background: linear-gradient(#fff, #fff) padding-box,
       linear-gradient(180deg, #bc9cff 0%, #8ba4f9 100%) border-box;
     border: 2px solid transparent;
@@ -124,7 +187,6 @@ h3 {
   font-size: 14px;
   line-height: 17px;
   text-decoration: none;
-  color: $dark-shade-50;
   position: relative;
   &::before {
     display: block;

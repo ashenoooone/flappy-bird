@@ -21,13 +21,14 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(loginUser({ email, password }));
+    dispatch(loginUser({ email, password }));
+    localStorage.setItem('isLogged', true);
     navigate('/');
   };
 
   return (
     <section className='login'>
-      <div className='login__container'>
+      <div className='container'>
         <h1 className='login__title'>Войти</h1>
         <form className='login__form form' onSubmit={onSubmit}>
           <input

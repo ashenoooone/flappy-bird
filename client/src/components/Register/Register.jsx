@@ -47,7 +47,7 @@ const Register = () => {
 
   return (
     <section className='register'>
-      <div className='register__container'>
+      <div className='container'>
         <h1 className='register__title'>Регистрация аккаунта</h1>
         <Formik
           initialValues={initialValues}

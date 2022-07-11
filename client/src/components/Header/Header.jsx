@@ -2,14 +2,12 @@ import React from 'react';
 import Logo from '../../images/Flappy_Bird_Logo.svg';
 import './Header.scss';
 import { Link, NavLink } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { useSelector } from 'react-redux/es/exports';
 
 const Header = () => {
-  const isLogged = localStorage.getItem('isLogged');
+  const isLogged = localStorage.getItem('isLogged') === 'true' ? true : false;
   return (
     <header className='header'>
-      <div className='header__wrapper'>
+      <div className='header__container container'>
         <img src={Logo} className='header__logo' alt='логотип' />
         <div className={`header__links ${!isLogged && 'header__links_hidden'}`}>
           <NavLink

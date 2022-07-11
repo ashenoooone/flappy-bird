@@ -1,0 +1,30 @@
+.settings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  .container {
+    gap: 20px;
+  }
+  &__text {
+    margin: 0;
+  }
+  &__label {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  &__theme {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  &__inputs {
+    display: flex;
+    gap: 15px;
+  }
+  .button {
+    height: 30px;
+    max-width: 100px;
+  }
+}
