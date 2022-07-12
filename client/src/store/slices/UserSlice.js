@@ -50,6 +50,7 @@ const UserSlice = createSlice({
     [loginUser.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+      console.log(state.error);
     },
     [getLeaders.fulfilled]: (state, action) => {
       state.leaders = action.payload;

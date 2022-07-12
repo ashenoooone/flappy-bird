@@ -6,11 +6,17 @@ import './Login.scss';
 
 const Login = () => {
   const error = useSelector((state) => state.user.error);
-  const jwt = localStorage.getItem('jwt');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isPasswordHiden, setIsPasswordHiden] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const onShowPasswordClick = (event) => {
+    if (!event.target.classList.contains('input')) {
+      event.target.classList.toggle('no-view');
+      setIsPasswordHiden(!isPasswordHiden);
+    }
+  };
   const onEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -21,9 +27,8 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password }));
-    localStorage.setItem('isLogged', true);
-    navigate('/');
+    await dispatch(loginUser({ email, password }));
+    navigate('/', { replace: true });
   };
 
   return (
@@ -39,14 +44,21 @@ const Login = () => {
             value={email}
             required
           />
-          <input
-            type='password'
-            className='login__input input'
-            placeholder='Пароль'
-            onChange={onPasswordChange}
-            value={password}
-            required
-          />
+          <div
+            onClick={onShowPasswordClick}
+            className={`form__password-input-container ${
+              !isPasswordHiden && 'no-view'
+            }`}
+          >
+            <input
+              type={`${isPasswordHiden ? 'password' : 'text'}`}
+              className='login__input input'
+              placeholder='Пароль'
+              onChange={onPasswordChange}
+              value={password}
+              required
+            />
+          </div>
           <pre className='form__error' style={{ minHeight: 48 }}>
             {error}
           </pre>

@@ -2,9 +2,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
+  padding: 60px 10px;
   &__table-heading {
-    width: max-content;
     text-align: left;
+  }
+  .container {
+    padding: 10px;
+    max-width: 500px;
+  }
+  &__table-cell {
+    word-wrap: break-word;
+    word-break: break-all;
   }
 }

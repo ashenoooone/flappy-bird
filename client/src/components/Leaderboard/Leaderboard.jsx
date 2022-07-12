@@ -5,7 +5,7 @@ const Leaderboard = ({ leaders }) => {
   return (
     <section className='leaderboard'>
       <div className='container'>
-        <table className='leaderboard__table'>
+        <table className='leaderboard__table' cellSpacing='15px'>
           <thead>
             <tr className='leaderboard__table-row'>
               <th className='leaderboard__table-heading'>
@@ -24,8 +24,8 @@ const Leaderboard = ({ leaders }) => {
               return (
                 <tr className='leaderboard__table-row' key={leader.id}>
                   <td className='leaderboard__table-cell'>{index + 1}</td>
-                  <td>{leader.username}</td>
-                  <td>{leader.score}</td>
+                  <td className='leaderboard__table-cell'>{leader.username}</td>
+                  <td className='leaderboard__table-cell'>{leader.score}</td>
                 </tr>
               );
             })}

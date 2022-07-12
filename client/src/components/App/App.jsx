@@ -18,11 +18,7 @@ function App() {
   const navigate = useNavigate();
   let themeLocal = localStorage.getItem('theme');
   const [theme, setTheme] = useState(themeLocal);
-  const isLoggedLocal = localStorage.getItem('isLogged');
-  // const [isLog ged, setIsLogged] = useState(false);
-  // if (isLoggedLocal) {
-  //   setIsLogged(isLoggedLocal);
-  // }
+
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
     const isLogged = localStorage.getItem('isLogged');

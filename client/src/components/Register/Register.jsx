@@ -53,7 +53,6 @@ const Register = () => {
           initialValues={initialValues}
           validate={validate}
           onSubmit={(values) => {
-            console.log(values);
             dispatch(registerUser(values));
           }}
         >

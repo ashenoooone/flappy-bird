@@ -14,6 +14,7 @@ export const loginUser = createAsyncThunk(
             },
           }
         );
+        localStorage.setItem('isLogged', true);
         return responce.data;
       } else {
         const responce = await axios.post(
@@ -24,6 +25,7 @@ export const loginUser = createAsyncThunk(
           }
         );
         localStorage.setItem('jwt', responce.data.token);
+        localStorage.setItem('isLogged', true);
         return responce.data;
       }
     } catch (error) {
