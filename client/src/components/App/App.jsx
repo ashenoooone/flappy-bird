@@ -12,6 +12,7 @@ import LeaderboardContainer from '../LeaderboardContainer/LeaderboardContainer';
 import IsAlreadyAuth from '../../hoc/AlreadyAuth';
 import Settings from '../Settings/Settings';
 import { removeUser } from '../../store/slices/UserSlice';
+import Game from '../Game/Game';
 
 function App() {
   const dispatch = useDispatch();
@@ -75,6 +76,14 @@ function App() {
                 onChangeThemeClick={onChangeThemeClick}
                 onLogoutClick={onLogoutClick}
               />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path='/play'
+          element={
+            <RequireAuth>
+              <Game />
             </RequireAuth>
           }
         />
