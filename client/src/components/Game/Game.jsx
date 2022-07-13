@@ -30,7 +30,7 @@ const Game = () => {
   const [isPaused, setIsPaused] = useState(false);
   const dispatch = useDispatch();
   const jwt = localStorage.getItem('jwt');
-  const score = localStorage.getItem('score');
+  const score = sessionStorage.getItem('score');
 
   useEffect(() => {
     const cvs = canvasRef.current;

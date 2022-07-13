@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux/es/exports';
 import { updateUser } from '../../store/slices/UserSlice';
 
 const Settings = ({ theme, onChangeThemeClick, onLogoutClick }) => {
-  const [userName, setUserName] = useState(localStorage.getItem('username'));
+  const [userName, setUserName] = useState(sessionStorage.getItem('username'));
   const dispatch = useDispatch();
   const jwt = localStorage.getItem('jwt');
   const onUserNameChange = (e) => {

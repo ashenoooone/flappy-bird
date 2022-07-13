@@ -19,32 +19,32 @@ import Game from '../Game/Game';
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let themeLocal = localStorage.getItem('theme');
+  let themeLocal = sessionStorage.getItem('theme');
   const [theme, setTheme] = useState(themeLocal);
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
-    const isLogged = localStorage.getItem('isLogged');
+    const isLogged = sessionStorage.getItem('isLogged');
     if (jwt && !isLogged) {
       dispatch(loginUser({ jwt }));
-      localStorage.setItem('isLogged', true);
+      sessionStorage.setItem('isLogged', true);
     }
   }, []);
 
   const onChangeThemeClick = () => {
     if (theme === 'light') {
       setTheme('dark');
-      localStorage.setItem('theme', 'dark');
+      sessionStorage.setItem('theme', 'dark');
     } else if (theme === 'dark') {
       setTheme('light');
-      localStorage.setItem('theme', 'light');
+      sessionStorage.setItem('theme', 'light');
     }
   };
 
   const onLogoutClick = () => {
     dispatch(removeUser());
     localStorage.removeItem('jwt');
-    localStorage.setItem('isLogged', false);
+    sessionStorage.setItem('isLogged', false);
     navigate('/login', { replace: true });
   };
 
@@ -108,4 +108,4 @@ function App() {
     </div>
   );
 }
-export default React.memo(App);
+export default App;

@@ -5,7 +5,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const Header = () => {
-  const isLogged = localStorage.getItem('isLogged') === 'true' ? true : false;
+  const isLogged = sessionStorage.getItem('isLogged') === 'true' ? true : false;
   const [isBurgerActive, setIsBurgerActive] = useState(window.innerWidth > 768);
   const onOpenBurgerClick = () => {
     setIsBurgerActive(!isBurgerActive);
@@ -101,4 +101,4 @@ const Header = () => {
   );
 };
 
-export default React.memo(Header);
+export default Header;

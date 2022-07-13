@@ -14,7 +14,7 @@ export const loginUser = createAsyncThunk(
             },
           }
         );
-        localStorage.setItem('isLogged', true);
+        sessionStorage.setItem('isLogged', true);
         return responce.data;
       } else {
         const responce = await axios.post(
@@ -25,7 +25,7 @@ export const loginUser = createAsyncThunk(
           }
         );
         localStorage.setItem('jwt', responce.data.token);
-        localStorage.setItem('isLogged', true);
+        sessionStorage.setItem('isLogged', true);
         console.log(responce.data);
         dispatch(editUser(responce.data));
         return responce.data;
@@ -122,25 +122,25 @@ const UserSlice = createSlice({
   },
   reducers: {
     removeUser(state, action) {
-      localStorage.setItem('username', '');
-      localStorage.setItem('email', '');
-      localStorage.setItem('score', 0);
+      sessionStorage.setItem('username', '');
+      sessionStorage.setItem('email', '');
+      sessionStorage.setItem('score', 0);
       state.isLoading = false;
       state.error = '';
       state.leaders = [];
     },
     editUser(state, action) {
-      localStorage.setItem(
+      sessionStorage.setItem(
         'username',
-        action.payload.username || localStorage.getItem('username')
+        action.payload.username || sessionStorage.getItem('username')
       );
-      localStorage.setItem(
+      sessionStorage.setItem(
         'email',
-        action.payload.email || localStorage.getItem('email')
+        action.payload.email || sessionStorage.getItem('email')
       );
-      localStorage.setItem(
+      sessionStorage.setItem(
         'score',
-        action.payload.score || localStorage.getItem('score')
+        action.payload.score || sessionStorage.getItem('score')
       );
     },
   },
