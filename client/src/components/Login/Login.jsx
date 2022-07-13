@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginUser } from '../../store/slices/thunks/userLoginThunk';
+// import { loginUser } from '../../store/slices/thunks/userLoginThunk';
+import { loginUser } from '../../store/slices/UserSlice';
 import './Login.scss';
 
 const Login = () => {

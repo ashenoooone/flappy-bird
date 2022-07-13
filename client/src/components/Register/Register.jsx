@@ -3,7 +3,7 @@ import './Register.scss';
 import { Link } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import { useDispatch } from 'react-redux';
-import { registerUser } from '../../store/slices/thunks/userRegisterThunk';
+import { registerUser } from '../../store/slices/UserSlice';
 // почта
 // пароль от 6 до 30 символов
 // имя пользователя от 4 до 30 символов

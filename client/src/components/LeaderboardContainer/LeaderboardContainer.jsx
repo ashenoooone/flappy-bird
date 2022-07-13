@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getLeaders } from '../../store/slices/thunks/userGetLeaders';
+import { getLeaders } from '../../store/slices/UserSlice';
 import Leaderboard from '../Leaderboard/Leaderboard';
 
 const LeaderboardContainer = () => {

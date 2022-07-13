@@ -1,0 +1,10 @@
+.game {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  &__img {
+    display: none;
+    width: 100px;
+    height: 100px;
+  }
+}

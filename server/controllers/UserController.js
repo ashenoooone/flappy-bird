@@ -1,4 +1,4 @@
-const { User, Folder } = require('../models/model');
+const { User } = require('../models/model');
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
 const db = require('../db');
@@ -55,10 +55,15 @@ class UserController {
       },
       process.env.SECRET_KEY,
       {
-        expiresIn: '24h',
+        expiresIn: '168h',
       }
     );
-    return res.json({ token, username: user.username, email: user.email });
+    return res.json({
+      token,
+      username: user.username,
+      email: user.email,
+      score: user.score,
+    });
   }
 
   async check(req, res) {
@@ -69,6 +74,22 @@ class UserController {
     const query = `SELECT id, email, username, password, score, "createdAt", "updatedAt" FROM public.users ORDER BY score DESC limit 5;`;
     const users = await db.query(query);
     return res.json(users);
+  }
+
+  async updateScore(req, res) {
+    const { score, username } = req.body;
+    if (score) {
+      await User.update(
+        { score: +score },
+        { where: { email: req.user.email } }
+      );
+    } else if (username) {
+      await User.update(
+        { username: username },
+        { where: { email: req.user.email } }
+      );
+    }
+    return res.status(200).send({ message: 'Данные успешно обновлены' });
   }
 }
 

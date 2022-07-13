@@ -7,5 +7,6 @@ router.post('/registration', UserController.register);
 router.post('/login', UserController.login);
 router.get('/auth', AuthMiddleware, UserController.check);
 router.get('/leaders', UserController.getLeaders);
+router.post('/', AuthMiddleware, UserController.updateScore);
 
 module.exports = router;

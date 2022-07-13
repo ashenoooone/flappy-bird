@@ -3,6 +3,11 @@
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
+  &__user-name {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+  }
   .container {
     gap: 20px;
     max-width: 500px;
@@ -26,6 +31,6 @@
   }
   .button {
     height: 30px;
-    max-width: 100px;
+    max-width: max-content;
   }
 }

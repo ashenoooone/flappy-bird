@@ -1,5 +1,6 @@
 import Header from '../Header/Header';
 import './App.scss';
+import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Login from '../Login/Login';
 import Register from '../Register/Register';
@@ -7,7 +8,8 @@ import Main from '../Main/Main';
 import RequireAuth from '../../hoc/RequireAuth';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux/es/exports';
-import { loginUser } from '../../store/slices/thunks/userLoginThunk';
+// import { loginUser } from '../../store/slices/thunks/userLoginThunk';
+import { loginUser } from '../../store/slices/UserSlice';
 import LeaderboardContainer from '../LeaderboardContainer/LeaderboardContainer';
 import IsAlreadyAuth from '../../hoc/AlreadyAuth';
 import Settings from '../Settings/Settings';
@@ -40,7 +42,6 @@ function App() {
   };
 
   const onLogoutClick = () => {
-    console.log(1);
     dispatch(removeUser());
     localStorage.removeItem('jwt');
     localStorage.setItem('isLogged', false);
@@ -107,5 +108,4 @@ function App() {
     </div>
   );
 }
-
-export default App;
+export default React.memo(App);
