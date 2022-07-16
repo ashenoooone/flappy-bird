@@ -14,13 +14,16 @@ const Header = () => {
   if (window.innerWidth < 768) {
     variants = {
       initial: {
-        right: '-100%',
+        height: 0,
+        opacity: 0,
       },
       animate: {
-        right: 0,
+        height: 'auto',
+        opacity: 1,
       },
       exit: {
-        right: '-100%',
+        opacity: 0,
+        height: 0,
       },
     };
   }
@@ -35,6 +38,7 @@ const Header = () => {
               variants={variants}
               transition={{
                 bounce: 'none',
+                duration: 0.2,
               }}
               initial='initial'
               animate='animate'
@@ -84,7 +88,7 @@ const Header = () => {
           className={`burger ${isBurgerActive && 'burger_active'}`}
           onClick={onOpenBurgerClick}
         >
-          <div></div>
+          <div className='burger__item'></div>
         </div>
         <div
           className={`header__buttons ${isLogged && 'header__buttons_hidden'}`}
