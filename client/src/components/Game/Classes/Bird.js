@@ -20,8 +20,8 @@ class Bird {
   }
   update(angle) {
     let curve = Math.sin(angle) * 15;
-    if (this.y > this.CANVAS_HEIGHT - this.height * 3 + curve) {
-      this.y = this.CANVAS_HEIGHT - this.height * 3 + curve;
+    if (this.y > this.CANVAS_HEIGHT - this.height * 2 + curve) {
+      this.y = this.CANVAS_HEIGHT - this.height * 2 + curve;
       this.vy = 0;
     } else {
       this.vy += this.weight;
@@ -31,7 +31,7 @@ class Bird {
     if (this.y < 0 + this.height) {
       this.y = 0 + this.height;
     }
-    if (window.GAMEisClicked && this.y > this.height * 3) this.jump();
+    if (window.GAMEisClicked && this.y > this.height * 2) this.jump();
   }
 
   jump() {

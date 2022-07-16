@@ -1,36 +1,50 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux/es/exports';
 import bg from '../../assets/background.png';
-import bird from '../../assets/bird.png';
+import bird from '../../assets/bird-standart.png';
+import bird_skin_1 from '../../assets/bird-skin-1.png';
+import bird_skin_2 from '../../assets/bird-skin-2.png';
 import fg from '../../assets/fg.png';
 import pipe from '../../assets/pipe.png';
 import topPipe from '../../assets/top-pipe.png';
-import './Game.scss';
+import { updateUser } from '../../store/slices/UserSlice';
 import Bird from './Classes/Bird';
 import handleParticles from './Classes/Particles';
-import handlePipes from './Classes/Pipes';
-import { handleCollision } from './Classes/Pipes';
-import { useDispatch } from 'react-redux/es/exports';
-import { updateUser } from '../../store/slices/UserSlice';
+import handlePipes, { handleCollision } from './Classes/Pipes';
+import './Game.scss';
 
-const CANVAS_WIDTH = 400;
-const CANVAS_HEIGHT = 500;
+const CANVAS_WIDTH = 320;
+const CANVAS_HEIGHT = 400;
 
-const BIRD_HEIGHT = 40;
-const BIRD_WIDTH = 60;
-
-const FG_HEIGHT = 100;
+const BIRD_HEIGHT = 30;
+const BIRD_WIDTH = 40;
 
 const Game = () => {
   const canvasRef = useRef(null);
   const birdRef = useRef(null);
+  const bird_skin_1Ref = useRef(null);
+  const bird_skin_2Ref = useRef(null);
   const topPipeRef = useRef(null);
   const bottomPipeRef = useRef(null);
   const bgRef = useRef(null);
   const fgRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
+  const [skin, setSkin] = useState(
+    sessionStorage.getItem('skin') || 'standart'
+  );
   const dispatch = useDispatch();
   const jwt = localStorage.getItem('jwt');
-  const score = sessionStorage.getItem('score');
+  const score = sessionStorage.getItem('score') || 0;
+
+  const onChangeSkinClick = (e) => {
+    setSkin(e.target.classList[0]);
+  };
+
+  const toggleGame = (e) => {
+    setIsStarted(!isStarted);
+    setIsPaused(false);
+  };
 
   useEffect(() => {
     const cvs = canvasRef.current;
@@ -39,20 +53,31 @@ const Game = () => {
     const bgI = bgRef.current;
     // ПТИЦА
     const birdI = birdRef.current;
+    // ПТИЦА СКИН 1
+    const bird_skin_1I = bird_skin_1Ref.current;
+    // ПТИЦА СКИН 2
+    const bird_skin_2I = bird_skin_2Ref.current;
+    // КОНЕЧЕНЫЙ СКИН
+    let game_skin;
+    if (skin === 'standart') {
+      game_skin = birdI;
+    } else if (skin === 'skin_1') {
+      game_skin = bird_skin_1I;
+    } else {
+      game_skin = bird_skin_2I;
+    }
     // ТРУБА ВЕРХНЯЯ
     const pipeTopI = topPipeRef.current;
     // ТРУБА НИЖНЯЯ
     const bottomPipeI = bottomPipeRef.current;
-    // ЗЕМЛЯ
-    const fgI = fgRef.current;
-
     let angle = 0;
-    let frame = -100;
+    let frame = 50;
     window.GAME_SCORE = 0;
+    let pipesArray = [];
 
     const bird = new Bird(
       ctx,
-      birdI,
+      game_skin,
       CANVAS_HEIGHT,
       CANVAS_WIDTH,
       BIRD_HEIGHT,
@@ -76,10 +101,9 @@ const Game = () => {
     (function render() {
       ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
       ctx.drawImage(bgI, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-      ctx.drawImage(fgI, 0, CANVAS_HEIGHT - FG_HEIGHT, CANVAS_WIDTH, FG_HEIGHT);
       bird.update(false, angle);
       bird.draw();
-      handleParticles(bird, 2, ctx, 'red');
+      // handleParticles(bird, 2, ctx, 'red', bird_skin_1I);
       handlePipes(
         frame,
         ctx,
@@ -88,19 +112,35 @@ const Game = () => {
         bottomPipeI,
         pipeTopI,
         2,
-        bird.x
+        bird.x,
+        pipesArray
       );
-      ctx.fillStyle = 'black';
-      ctx.font = '40px Montserrat';
-      ctx.fillText('Score : ' + window.GAME_SCORE, 10, CANVAS_HEIGHT - 20);
-      handleCollision(bird, CANVAS_HEIGHT);
-      if (handleCollision(bird, CANVAS_HEIGHT)) {
+      handleCollision(bird, CANVAS_HEIGHT, pipesArray);
+      if (handleCollision(bird, CANVAS_HEIGHT, pipesArray)) {
+        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        ctx.fillStyle = 'black';
+        ctx.font = '40px Montserrat';
+        ctx.fillText(
+          'Score : ' + window.GAME_SCORE,
+          CANVAS_WIDTH / 3 - 20,
+          CANVAS_HEIGHT / 2
+        );
+        ctx.fillText(
+          'Best : ' + score,
+          CANVAS_WIDTH / 3 - 20,
+          CANVAS_HEIGHT / 2 + 50
+        );
         setIsPaused(true);
-        if (window.GAME_SCORE > score)
+        if (window.GAME_SCORE > score) {
+          console.log(window.GAME_SCORE, score);
           dispatch(updateUser({ jwt, score: window.GAME_SCORE }));
+        }
         return;
       }
       if (!isPaused) requestAnimationFrame(render);
+      ctx.fillStyle = 'black';
+      ctx.font = '40px Montserrat';
+      ctx.fillText('Score : ' + window.GAME_SCORE, 10, CANVAS_HEIGHT - 20);
       angle += 0.12;
       frame++;
     })();
@@ -110,7 +150,7 @@ const Game = () => {
       document.removeEventListener('mousedown', toggleMouseClick);
       document.removeEventListener('mouseup', toggleMouseClick);
     };
-  }, []);
+  }, [isStarted]);
 
   return (
     <div className='game'>
@@ -120,7 +160,43 @@ const Game = () => {
         width={CANVAS_WIDTH}
         height={CANVAS_HEIGHT}
       ></canvas>
-      <img ref={birdRef} className='game__img' src={bird} alt='птица' />
+      <button
+        className={`button button_default game__button ${
+          !isPaused && 'game__button_invisible'
+        }`}
+        onClick={toggleGame}
+      >
+        Начать заново
+      </button>
+      <div className={`game__skins ${!isPaused && 'game__skins_inactive'}`}>
+        <img
+          ref={birdRef}
+          className={`standart game__skin ${
+            skin === 'standart' && 'game__skin_active'
+          }`}
+          src={bird}
+          alt='скин стандартный'
+          onClick={onChangeSkinClick}
+        />
+        <img
+          ref={bird_skin_1Ref}
+          className={`skin_1 game__skin ${
+            skin === 'skin_1' && 'game__skin_active'
+          }`}
+          src={bird_skin_1}
+          alt='скин 1'
+          onClick={onChangeSkinClick}
+        />
+        <img
+          ref={bird_skin_2Ref}
+          className={`skin_2 game__skin ${
+            skin === 'skin_2' && 'game__skin_active'
+          }`}
+          src={bird_skin_2}
+          alt='скин 2'
+          onClick={onChangeSkinClick}
+        />
+      </div>
       <img ref={topPipeRef} src={topPipe} className='game__img' alt='птица' />
       <img ref={bottomPipeRef} src={pipe} alt='птица' className='game__img' />
       <img ref={bgRef} src={bg} alt='птица' className='game__img' />

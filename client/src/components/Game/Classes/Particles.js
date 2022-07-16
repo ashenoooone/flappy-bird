@@ -1,7 +1,8 @@
 const particlesArray = [];
 
 class Particle {
-  constructor(bird, gameSpeed, ctx, color) {
+  constructor(bird, gameSpeed, ctx, color, image) {
+    this.image = image;
     this.x = bird.x;
     this.y = bird.y + bird.width / 2;
     this.ctx = ctx;
@@ -22,8 +23,8 @@ class Particle {
   }
 }
 
-export default function handleParticles(bird, gameSpeed, ctx, color) {
-  particlesArray.unshift(new Particle(bird, gameSpeed, ctx, color));
+export default function handleParticles(bird, gameSpeed, ctx, color, image) {
+  particlesArray.unshift(new Particle(bird, gameSpeed, ctx, color, image));
   for (let i = 0; i < particlesArray.length; i++) {
     particlesArray[i].update();
     particlesArray[i].draw();

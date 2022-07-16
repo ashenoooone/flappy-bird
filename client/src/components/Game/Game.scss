@@ -1,10 +1,33 @@
 .game {
   display: flex;
-  justify-content: center;
+  align-items: center;
   padding: 20px;
+  gap: 20px;
+  flex-direction: column;
+  position: relative;
   &__img {
     display: none;
     width: 100px;
     height: 100px;
+  }
+  &__button {
+    position: absolute;
+    top: 300px;
+    &_invisible {
+      display: none;
+    }
+  }
+  &__skins {
+    &_inactive {
+      display: none;
+    }
+    display: flex;
+    gap: 5px;
+  }
+  &__skin {
+    max-width: 100px;
+    &_active {
+      outline: 4px solid greenyellow;
+    }
   }
 }

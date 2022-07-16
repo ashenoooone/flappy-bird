@@ -15,6 +15,8 @@ export const loginUser = createAsyncThunk(
           }
         );
         sessionStorage.setItem('isLogged', true);
+        console.log(responce.data);
+        dispatch(editUser(responce.data));
         return responce.data;
       } else {
         const responce = await axios.post(
@@ -26,7 +28,6 @@ export const loginUser = createAsyncThunk(
         );
         localStorage.setItem('jwt', responce.data.token);
         sessionStorage.setItem('isLogged', true);
-        console.log(responce.data);
         dispatch(editUser(responce.data));
         return responce.data;
       }
@@ -138,10 +139,8 @@ const UserSlice = createSlice({
         'email',
         action.payload.email || sessionStorage.getItem('email')
       );
-      sessionStorage.setItem(
-        'score',
-        action.payload.score || sessionStorage.getItem('score')
-      );
+      if (action.payload.score === 0 || action.payload.score > 0)
+        sessionStorage.setItem('score', action.payload.score);
     },
   },
   extraReducers: {

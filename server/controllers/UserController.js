@@ -48,10 +48,7 @@ class UserController {
     }
     const token = jsonwebtoken.sign(
       {
-        id: user.id,
         email: user.email,
-        username: user.username,
-        score: user.score,
       },
       process.env.SECRET_KEY,
       {
@@ -67,7 +64,8 @@ class UserController {
   }
 
   async check(req, res) {
-    return res.json(req.user);
+    const user = await User.findOne({ where: { email: req.user.email } });
+    return res.json(user);
   }
 
   async getLeaders(req, res) {

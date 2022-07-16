@@ -8,7 +8,6 @@ import Main from '../Main/Main';
 import RequireAuth from '../../hoc/RequireAuth';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux/es/exports';
-// import { loginUser } from '../../store/slices/thunks/userLoginThunk';
 import { loginUser } from '../../store/slices/UserSlice';
 import LeaderboardContainer from '../LeaderboardContainer/LeaderboardContainer';
 import IsAlreadyAuth from '../../hoc/AlreadyAuth';
@@ -19,8 +18,9 @@ import Game from '../Game/Game';
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let themeLocal = sessionStorage.getItem('theme');
-  const [theme, setTheme] = useState(themeLocal);
+  const [theme, setTheme] = useState(
+    sessionStorage.getItem('theme') || 'light'
+  );
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');

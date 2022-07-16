@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../store/slices/UserSlice';
+import { useNavigate } from 'react-router-dom';
 // почта
 // пароль от 6 до 30 символов
 // имя пользователя от 4 до 30 символов
 const Register = () => {
   const [isPasswordHiden, setIsPasswordHiden] = useState(true);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onShowPasswordClick = (event) => {
     if (!event.target.classList.contains('input')) {
       event.target.classList.toggle('no-view');
@@ -54,6 +56,7 @@ const Register = () => {
           validate={validate}
           onSubmit={(values) => {
             dispatch(registerUser(values));
+            navigate('/login');
           }}
         >
           {({ errors, touched, isValid, dirty }) => (

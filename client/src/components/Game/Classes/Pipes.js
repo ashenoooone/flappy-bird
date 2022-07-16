@@ -1,5 +1,3 @@
-let pipesArray = [];
-
 class Pipe {
   constructor(
     ctx,
@@ -9,8 +7,8 @@ class Pipe {
     top_image,
     gameSpeed
   ) {
-    this.top = (Math.random() * CANVAS_HEIGHT) / 3 + 38;
-    this.bottom = (Math.random() * CANVAS_HEIGHT) / 3 + 98;
+    this.top = (Math.random() * CANVAS_HEIGHT) / 3 + 48;
+    this.bottom = (Math.random() * CANVAS_HEIGHT) / 3 + 48;
     this.x = CANVAS_WIDTH;
     this.CANVAS_HEIGHT = CANVAS_HEIGHT;
     this.width = 60;
@@ -50,9 +48,10 @@ export default function handlePipes(
   bottom_image,
   top_image,
   gameSpeed,
-  birdX
+  birdX,
+  pipesArray
 ) {
-  if (frame % 60 === 0 && frame > 0) {
+  if (frame % 100 === 0 && frame > 0) {
     pipesArray.unshift(
       new Pipe(
         ctx,
@@ -72,13 +71,13 @@ export default function handlePipes(
   }
 }
 
-export function handleCollision(bird, CANVAS_HEIGHT) {
+export function handleCollision(bird, CANVAS_HEIGHT, pipesArray) {
   for (var i = 0; i < pipesArray.length; i++) {
     if (
       bird.x < pipesArray[i].x + pipesArray[i].width &&
       bird.x + bird.width > pipesArray[i].x &&
       ((bird.y < 0 + pipesArray[i].top && bird.y + bird.height > 0) ||
-        (bird.y > CANVAS_HEIGHT - pipesArray[i].bottom &&
+        (bird.y + bird.height > CANVAS_HEIGHT - pipesArray[i].bottom &&
           bird.y + bird.height < CANVAS_HEIGHT))
     ) {
       return true;

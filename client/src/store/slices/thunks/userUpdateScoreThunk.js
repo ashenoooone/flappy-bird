@@ -16,7 +16,6 @@ export const updateScore = createAsyncThunk(
           },
         }
       );
-      console.log(leaders.data);
     } catch (error) {
       return rejectWithValue(error.response.data.message);
     }
