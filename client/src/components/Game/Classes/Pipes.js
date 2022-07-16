@@ -5,7 +5,8 @@ class Pipe {
     CANVAS_WIDTH,
     bottom_image,
     top_image,
-    gameSpeed
+    gameSpeed,
+    sound
   ) {
     this.top = (Math.random() * CANVAS_HEIGHT) / 3 + 48;
     this.bottom = (Math.random() * CANVAS_HEIGHT) / 3 + 48;
@@ -17,6 +18,7 @@ class Pipe {
     this.top_image = top_image;
     this.gameSpeed = gameSpeed;
     this.counted = false;
+    this.sound = sound;
   }
 
   draw() {
@@ -34,6 +36,7 @@ class Pipe {
     this.x -= this.gameSpeed * 2;
     if (!this.counted && this.x < birdX) {
       window.GAME_SCORE++;
+      if (this.sound) this.sound.play();
       this.counted = true;
     }
     this.draw();
@@ -49,7 +52,8 @@ export default function handlePipes(
   top_image,
   gameSpeed,
   birdX,
-  pipesArray
+  pipesArray,
+  sound
 ) {
   if (frame % 100 === 0 && frame > 0) {
     pipesArray.unshift(
@@ -59,7 +63,8 @@ export default function handlePipes(
         CANVAS_WIDTH,
         bottom_image,
         top_image,
-        gameSpeed
+        gameSpeed,
+        sound
       )
     );
   }

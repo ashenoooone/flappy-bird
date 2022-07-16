@@ -12,6 +12,8 @@ import Bird from './Classes/Bird';
 import handleParticles from './Classes/Particles';
 import handlePipes, { handleCollision } from './Classes/Pipes';
 import './Game.scss';
+import deathSound from '../../sounds/die.mp3';
+import scoreSound from '../../sounds/point.mp3';
 
 const CANVAS_WIDTH = 320;
 const CANVAS_HEIGHT = 400;
@@ -27,9 +29,13 @@ const Game = () => {
   const topPipeRef = useRef(null);
   const bottomPipeRef = useRef(null);
   const bgRef = useRef(null);
+  const deathSoundRef = useRef(null);
+  const scoreSoundRef = useRef(null);
   const fgRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const isSoundsAllowed =
+    sessionStorage.getItem('isSoundsAllowed') === 'true' ? true : false;
   const [skin, setSkin] = useState(
     sessionStorage.getItem('skin') || 'standart'
   );
@@ -57,7 +63,7 @@ const Game = () => {
     const bird_skin_1I = bird_skin_1Ref.current;
     // ПТИЦА СКИН 2
     const bird_skin_2I = bird_skin_2Ref.current;
-    // КОНЕЧЕНЫЙ СКИН
+    // КОНЕЧНЫЙ СКИН
     let game_skin;
     if (skin === 'standart') {
       game_skin = birdI;
@@ -74,6 +80,14 @@ const Game = () => {
     let frame = 50;
     window.GAME_SCORE = 0;
     let pipesArray = [];
+    // ЗВУК СМЕРТИ
+    let deathSoundMP;
+    // ЗВУК ПОИНТА
+    let scoreSoundMP;
+    if (isSoundsAllowed) {
+      deathSoundMP = deathSoundRef.current;
+      scoreSoundMP = scoreSoundRef.current;
+    }
 
     const bird = new Bird(
       ctx,
@@ -113,10 +127,12 @@ const Game = () => {
         pipeTopI,
         2,
         bird.x,
-        pipesArray
+        pipesArray,
+        scoreSoundMP
       );
       handleCollision(bird, CANVAS_HEIGHT, pipesArray);
       if (handleCollision(bird, CANVAS_HEIGHT, pipesArray)) {
+        if (deathSoundMP) deathSoundMP.play();
         ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         ctx.fillStyle = 'black';
         ctx.font = '40px Montserrat';
@@ -201,6 +217,8 @@ const Game = () => {
       <img ref={bottomPipeRef} src={pipe} alt='птица' className='game__img' />
       <img ref={bgRef} src={bg} alt='птица' className='game__img' />
       <img src={fg} ref={fgRef} alt='птица' className='game__img' />
+      <audio ref={deathSoundRef} src={deathSound} />
+      <audio ref={scoreSoundRef} src={scoreSound} />
     </div>
   );
 };
