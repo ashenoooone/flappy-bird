@@ -8,8 +8,8 @@ class Pipe {
     gameSpeed,
     sound
   ) {
-    this.top = (Math.random() * CANVAS_HEIGHT) / 3 + 48;
-    this.bottom = (Math.random() * CANVAS_HEIGHT) / 3 + 48;
+    this.top = (Math.random() * CANVAS_HEIGHT) / 3 + 38;
+    this.bottom = (Math.random() * CANVAS_HEIGHT) / 3 + 38;
     this.x = CANVAS_WIDTH;
     this.CANVAS_HEIGHT = CANVAS_HEIGHT;
     this.width = 60;

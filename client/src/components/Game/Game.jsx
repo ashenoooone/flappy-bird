@@ -112,12 +112,13 @@ const Game = () => {
     document.addEventListener('keyup', toggleSpaceClick);
     document.addEventListener('mousedown', toggleMouseClick);
     document.addEventListener('mouseup', toggleMouseClick);
+    document.addEventListener('touchstart', toggleMouseClick);
+    document.addEventListener('touchend', toggleMouseClick);
     (function render() {
       ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
       ctx.drawImage(bgI, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
       bird.update(false, angle);
       bird.draw();
-      // handleParticles(bird, 2, ctx, 'red', bird_skin_1I);
       handlePipes(
         frame,
         ctx,
@@ -165,6 +166,8 @@ const Game = () => {
       document.removeEventListener('keyup', toggleSpaceClick);
       document.removeEventListener('mousedown', toggleMouseClick);
       document.removeEventListener('mouseup', toggleMouseClick);
+      document.removeEventListener('touchstart', toggleMouseClick);
+      document.removeEventListener('touchend', toggleMouseClick);
     };
   }, [isStarted]);
 
