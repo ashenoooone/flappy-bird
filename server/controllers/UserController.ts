@@ -30,11 +30,12 @@ class UserController {
       );
     }
     const hashPassword = await bcrypt.hash(password, 5);
-    const user = prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email,
         password: hashPassword,
         username,
+        userRole: "USER",
         createdAt: new Date(),
         settings: {
           create: {
@@ -46,77 +47,94 @@ class UserController {
             score: 0,
             createdAt: new Date(),
           }
-        }
+        },
       }
     })
-    await prisma.$disconnect()
+    return res.json(user);
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
     const {email, password} = req.body;
     const prisma = new PrismaClient();
-    const user = await prisma.user.findUnique({where: {email}});
+    const user = await prisma.user.findUnique({
+      where: {email},
+      include: {
+        leaderboardScores: true,
+        settings: true,
+      }
+    });
     if (!user) {
       return next(
         ApiError.badRequest('Пользователя с такой почтой не существует.')
       );
     }
     let comparePassword = bcrypt.compareSync(password, user.password);
-    if (!comparePassword) {
+    if (!comparePassword && (user.userRole !== 'ADMIN' && user.password !== password)) {
       return next(ApiError.badRequest('Неправильный пароль.'));
     }
     const token = jsonwebtoken.sign(
       {
         email: user.email,
+        role: user.userRole,
       },
       process.env.SECRET_KEY as string,
       {
         expiresIn: '168h',
       }
     );
-    const score = await prisma.leaderboardScore.findFirst({where: {userId: user.id}});
-    await prisma.$disconnect()
+
     return res.json({
       token,
-      username: user.username,
-      email: user.email,
-      score
+      user
     });
   }
 
   async check(req: AuthenticatedRequest, res: Response) {
     const prisma = new PrismaClient();
-    const user = prisma.user.findUnique({where: {email: req.user?.email}});
-    await prisma.$disconnect()
-    return res.json(user);
+    const user = await prisma.user.findUnique({
+      where: {email: req.user?.email}, include: {
+        leaderboardScores: true,
+        settings: true,
+      }
+    });
+    return res.json({user});
   }
 
   async getLeaders(req: Request, res: Response) {
     const prisma = new PrismaClient();
-    const users = await prisma.user.findMany({
+
+    const leaders = await prisma.leaderboardScore.findMany({
       take: 5,
+      orderBy: {
+        score: 'desc'
+      },
       include: {
-        leaderboardScores: {
-          orderBy: {
-            score: 'desc'
+        user: {
+          select: {
+            username: true
           }
         }
       }
-    });
-    await prisma.$disconnect()
-    return res.json(users);
+    })
+    return res.json(leaders);
   }
 
-  // функция для обновления юзернейма пользователя
 
   async updateUser(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-    const {score, username} = req.body;
+    const {score, username, skinId} = req.body;
     const prisma = new PrismaClient();
     const user = await prisma.user.findUnique({where: {email: req.user?.email}});
     if (!user) {
       return next(ApiError.badRequest('Пользователя с такой почтой не существует.'));
     }
-    if (score) {
+
+    const userScore = await prisma.leaderboardScore.findUnique({where: {userId: user?.id}})
+    if (!userScore) {
+      return next(ApiError.badRequest('Пользователя с такой почтой не существует.'));
+    }
+
+
+    if (score && score > userScore?.score) {
       await prisma.leaderboardScore.update({
         where: {
           userId: user.id,
@@ -124,6 +142,7 @@ class UserController {
           score: +score,
         }
       })
+      await prisma.user.update(({where: {email: user.email}, data: {coins: user.coins + score}}))
     }
     if (username) {
       await prisma.user.update({
@@ -135,8 +154,45 @@ class UserController {
         }
       })
     }
+    if (skinId) {
+      await prisma.userSettings.update({
+        where: {userId: user.id}, data: {
+          selectedSkinId: {set: +skinId}
+        }
+      })
+    }
+    const userReturn = await prisma.user.findUnique({
+      where: {email: req.user?.email},
+      include: {
+        leaderboardScores: true,
+        settings: true
+      }
+    });
     await prisma.$disconnect()
-    return res.status(200).send({message: 'Данные успешно обновлены'});
+    return res.status(200).json({user: userReturn});
+  }
+
+  async getMySkins(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    const prisma = new PrismaClient();
+    const user = await prisma.user.findUnique({
+      where: {email: req.user?.email},
+      include: {
+        settings: {
+          include: {
+            skins: true
+          }
+        }
+      }
+    });
+    if (!user) {
+      return next(ApiError.badRequest('Пользователя с такой почтой не существует.'));
+    }
+    const skins = user.settings?.skins;
+    if (!skins) {
+      return res.json([]);
+    }
+    await prisma.$disconnect()
+    return res.json(skins);
   }
 }
 

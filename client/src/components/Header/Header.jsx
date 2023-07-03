@@ -81,6 +81,15 @@ const Header = () => {
               >
                 Играть
               </NavLink>
+              <NavLink
+                to='/shop'
+                title='Магазин'
+                className={({ isActive }) =>
+                  'link' + (isActive ? ' link_active' : '')
+                }
+              >
+                Магазин
+              </NavLink>
             </motion.div>
           )}
         </AnimatePresence>

@@ -4,8 +4,14 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+export interface User {
+  email:string;
+  role: string;
+  [key:string]:string;
+}
+
 export interface AuthenticatedRequest extends Request {
-  user?: { [key: string]: any };
+  user?: User;
 }
 
 export default function authMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction) {
@@ -14,10 +20,11 @@ export default function authMiddleware(req: AuthenticatedRequest, res: Response,
     if (!token) {
       return res.status(401).json({ message: 'Пользователь не авторизован' });
     }
-    const secretKey: Secret = process.env.SECRET_KEY || ''; // Указать нужный тип или значение по умолчанию
-    req.user = jwt.verify(token, secretKey) as { [key: string]: any };
+    const secretKey: Secret = process.env.SECRET_KEY || '';
+    req.user = jwt.verify(token, secretKey) as User;
     next();
   } catch (err) {
+    console.log(err)
     return res.status(401).json({ message: 'Пользователь не авторизован' });
   }
 }
