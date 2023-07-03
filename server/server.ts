@@ -3,15 +3,15 @@ import dotenv from 'dotenv';
 import router from './routes/index';
 import cors from 'cors';
 import errorHandler from './middleware/ErrorHandlingMiddleware';
-import multer from "multer";
+import bodyParser from "body-parser";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-app.use(express.urlencoded({extended: true}));
 app.use('/api', router);
 app.use('/api', express.static('static'));
 app.use(errorHandler);

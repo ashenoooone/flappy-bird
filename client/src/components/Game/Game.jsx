@@ -48,7 +48,6 @@ const Game = () => {
 	const score = user.score
 
 
-
 	const toggleGame = (e) => {
 		setIsStarted(!isStarted);
 		setIsPaused(false);
@@ -131,23 +130,6 @@ const Game = () => {
 			if (handleCollision(bird, CANVAS_HEIGHT, pipesArray)) {
 				if (deathSoundMP) deathSoundMP.play();
 				ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-				ctx.fillStyle = 'black';
-				ctx.font = '40px Montserrat';
-				ctx.fillText(
-					'Score : ' + window.GAME_SCORE,
-					CANVAS_WIDTH / 3 - 20,
-					CANVAS_HEIGHT / 2
-				);
-				ctx.fillText(
-					'Best : ' + score,
-					CANVAS_WIDTH / 3 - 20,
-					CANVAS_HEIGHT / 2 + 50
-				);
-				ctx.fillText(
-					'Earn : ' + window.GAME_SCORE,
-					CANVAS_WIDTH / 3 - 20,
-					CANVAS_HEIGHT / 2 - 50
-				);
 				setIsPaused(true);
 				dispatch(updateUser({jwt, score: window.GAME_SCORE}));
 				return;
@@ -170,40 +152,42 @@ const Game = () => {
 	}, [isStarted]);
 
 	return (
-		<div className='game'>
-			<canvas
-				ref={canvasRef}
-				id='canvas'
-				width={CANVAS_WIDTH}
-				height={CANVAS_HEIGHT}
-			></canvas>
-			<div className={`after_game_menu ${!isPaused && 'after_game_menu_inbisible'}`}>
-				<span className={'score'}>Счет {window.GAME_SCORE}</span>
-				<span className={'best'}>Лучший счет {score}</span>
-				<span className={'earn'}>Заработано {window.GAME_SCORE}$</span>
-				<button
-					className={`button button_default game__button ${
-						!isPaused && 'game__button_invisible'
-					}`}
-					onClick={toggleGame}
-				>
-					Начать заново
-				</button>
+		<div className={'game_wrapper'}>
+			<div className='game'>
+				<canvas
+					ref={canvasRef}
+					id='canvas'
+					width={CANVAS_WIDTH}
+					height={CANVAS_HEIGHT}
+				></canvas>
+				<div className={`after_game_menu ${!isPaused && 'after_game_menu_inbisible'}`}>
+					<span className={'score'}>Счет {window.GAME_SCORE}</span>
+					<span className={'best'}>Лучший счет {score}</span>
+					<span className={'earn'}>Заработано {window.GAME_SCORE}$</span>
+					<button
+						className={`button button_default game__button ${
+							!isPaused && 'game__button_invisible'
+						}`}
+						onClick={toggleGame}
+					>
+						Начать заново
+					</button>
+				</div>
+				<div className={`game__skins game__skins_inactive`}>
+					<img
+						ref={birdRef}
+						className={`standart game__skin`}
+						src={`${serverUrl}${skinPath}`}
+						alt='скин стандартный'
+					/>
+				</div>
+				<img ref={topPipeRef} src={topPipe} className='game__img' alt='птица'/>
+				<img ref={bottomPipeRef} src={pipe} alt='птица' className='game__img'/>
+				<img ref={bgRef} src={bg} alt='птица' className='game__img'/>
+				<img src={fg} ref={fgRef} alt='птица' className='game__img'/>
+				<audio ref={deathSoundRef} src={deathSound}/>
+				<audio ref={scoreSoundRef} src={scoreSound}/>
 			</div>
-			<div className={`game__skins game__skins_inactive`}>
-				<img
-					ref={birdRef}
-					className={`standart game__skin`}
-					src={`${serverUrl}${skinPath}`}
-					alt='скин стандартный'
-				/>
-			</div>
-			<img ref={topPipeRef} src={topPipe} className='game__img' alt='птица'/>
-			<img ref={bottomPipeRef} src={pipe} alt='птица' className='game__img'/>
-			<img ref={bgRef} src={bg} alt='птица' className='game__img'/>
-			<img src={fg} ref={fgRef} alt='птица' className='game__img'/>
-			<audio ref={deathSoundRef} src={deathSound}/>
-			<audio ref={scoreSoundRef} src={scoreSound}/>
 		</div>
 	);
 };

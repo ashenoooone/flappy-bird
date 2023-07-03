@@ -9,7 +9,7 @@ export const getAllUsers = createAsyncThunk(
 			const users = await $api.get('/admin/users');
 			dispatch(setUsers(users.data))
 		} catch (error) {
-			return rejectWithValue(error.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
@@ -21,7 +21,7 @@ export const addBalance = createAsyncThunk(
 			const response = await $api.post('/admin/user/balance/add', {userId, add});
 			return response.data
 		} catch (error) {
-			return rejectWithValue(error.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
@@ -34,7 +34,7 @@ export const subtractBalance = createAsyncThunk(
 			const response = await $api.post('/admin/user/balance/sub', {userId, sub});
 			return response.data
 		} catch (error) {
-			return rejectWithValue(error.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
@@ -46,7 +46,7 @@ export const banUser = createAsyncThunk(
 			const response = await $api.post('/admin/user/ban', {userId});
 			return response.data
 		} catch (error) {
-			return rejectWithValue(error.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
@@ -58,7 +58,34 @@ export const unbanUser = createAsyncThunk(
 			const response = await $api.post('/admin/user/unban', {userId});
 			return response.data
 		} catch (error) {
-			return rejectWithValue(error.message);
+			return rejectWithValue(error.response.data);
+		}
+	}
+);
+
+export const deleteSkin = createAsyncThunk(
+	'admin/deleteSkin',
+	async function (skinId, {rejectWithValue}) {
+		try {
+			const response = await $api.post('/admin/skin/remove', {skinId}).catch((e) => {
+				throw e
+			});
+			return response.data
+		} catch (error) {
+			return rejectWithValue(error.response.data);
+		}
+	}
+);
+
+
+export const addSkin = createAsyncThunk(
+	'admin/addSkin',
+	async function (formData, {rejectWithValue}) {
+		try {
+			const response = await $api.post('/admin/skin/add', formData);
+			return response.data
+		} catch (error) {
+			return rejectWithValue(error.response.data);
 		}
 	}
 );

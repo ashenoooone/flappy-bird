@@ -31,7 +31,6 @@ const Login = () => {
 		await dispatch(loginUser({email, password})).then(() => {
 			navigate('/', {replace: true});
 		})
-			.catch(e => console.log(e));
 	};
 
 	return (

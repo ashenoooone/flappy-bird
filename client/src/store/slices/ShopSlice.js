@@ -9,7 +9,7 @@ export const getMySkins = createAsyncThunk(
 			const skins = await $api.get('/user/skin');
 			return skins.data
 		} catch (error) {
-			return rejectWithValue(error.response.data.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
@@ -21,7 +21,7 @@ export const buySkin = createAsyncThunk(
 			const skins = await $api.post('/skin/buy', {skinId});
 			fulfillWithValue(skins)
 		} catch (error) {
-			return rejectWithValue(error.response.data.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
@@ -33,7 +33,7 @@ export const getAllSkins = createAsyncThunk(
 			const skins = await $api.get('/skin/');
 			return skins.data;
 		} catch (error) {
-			return rejectWithValue(error.response.data.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );

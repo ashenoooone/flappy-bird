@@ -1,74 +1,39 @@
-.admin_container {
-  margin: 0 auto;
-  max-width: 1024px;
-  width: 100%;
+.admin-panel {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-
-
-  .filters {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-
-    .filter {
-      display: flex;
-      flex-direction: column;
-      margin-right: 10px;
-      label {
-        margin-right: 5px;
-      }
-      input,
-      select {
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-    }
-
-    .clearFiltersBtn {
-      padding: 5px 10px;
-      background-color: #f44336;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  }
-}
-
-.user_table {
-  width: 90%;
-  max-width: 800px;
-  margin-top: 20px;
-  border-collapse: collapse;
-}
-
-.user_table th,
-.user_table td {
+  max-width: 1024px;
+  margin: 0 auto;
   padding: 10px;
-  text-align: center;
-  border: 1px solid #ddd;
+  gap: 20px;
 }
 
-.user_table th {
-  background-color: #f2f2f2;
-}
-
-.user_table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.user_table button {
-  padding: 5px 10px;
-  background-color: #4285f4;
-  color: white;
-  border: none;
+.admin-section {
+  background-color: #fff;
+  padding: 20px;
   border-radius: 4px;
-  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.user_table button:hover {
-  background-color: #3367d6;
+.users-section {
+  background-color: #f8eaff;
+}
+
+.skins-section {
+  background-color: #eafff3;
+}
+
+.section-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.section-description {
+  font-size: 16px;
+  color: #888;
+}
+
+.section-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: none;
 }

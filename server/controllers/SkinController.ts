@@ -59,43 +59,7 @@ class SkinController {
         }
       }
     })
-
     return res.status(200).json(skin);
-  }
-
-  async addSkin(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-    const prisma = new PrismaClient();
-    const {name, cost} = req.body
-    const file = req.file
-    if (!req.user) {
-      return res.status(400).json({message: "Пользователь не найден"})
-    }
-    if (!name || !cost) {
-      return res.status(400).json({message: "Не все поля заполнены"})
-    }
-    if (!file) {
-      return res.status(400).json({message: "Файл не найден"})
-    }
-    let newPath = `${config.paths.static}\\${name}.${file?.originalname.split(".")[1]}`;
-    if (fs.existsSync(newPath)) {
-      return res.status(400).json({message: "Скин с таким названием уже существует"})
-    }
-    fs.rename(file.path, newPath, (err) => {
-      if (err) throw err;
-    });
-    const skin = await prisma.skin.create({
-      data: {
-        name,
-        imageURL: `/${name}.${file?.originalname.split(".")[1]}`,
-        cost: +cost,
-        userSettings: {
-          connect: {
-            userId: 1
-          }
-        }
-      }
-    })
-    return res.json(skin);
   }
 }
 

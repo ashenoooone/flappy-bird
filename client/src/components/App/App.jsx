@@ -18,7 +18,9 @@ import Game from '../Game/Game';
 import ShopPage from "../Shop/ShopPage";
 import {ToastContainer} from "react-toastify";
 import {useSelector} from "react-redux";
+import AdminUsers from "../Admin/nested/users/AdminUsers";
 import Admin from "../Admin/Admin";
+import AdminSkins from "../Admin/nested/skins/AdminSkins";
 
 function App() {
 	const dispatch = useDispatch();
@@ -67,6 +69,22 @@ function App() {
 					element={
 						<RequireAuth>
 							<Admin/>
+						</RequireAuth>
+					}
+				/>
+				<Route
+					path='/admin/users'
+					element={
+						<RequireAuth>
+							<AdminUsers/>
+						</RequireAuth>
+					}
+				/>
+				<Route
+					path='/admin/skins'
+					element={
+						<RequireAuth>
+							<AdminSkins/>
 						</RequireAuth>
 					}
 				/>

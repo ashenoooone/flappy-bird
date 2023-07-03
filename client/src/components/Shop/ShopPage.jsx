@@ -46,7 +46,6 @@ const ShopPage = () => {
 	const onSelectSkinClick = useCallback((event) => {
 		dispatch(updateUser({skinId: event.target.id}))
 			.then((res) => {
-				console.log(res)
 				if (res.type.toLowerCase().includes("rejected")) {
 					toast("Ошибка при обновлении", {
 						type: "error",

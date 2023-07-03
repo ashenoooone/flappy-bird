@@ -1,3 +1,9 @@
+.game_wrapper {
+  background-image: url("../../assets/img.png");
+  height: 100vh;
+}
+
+
 .after_game_menu {
   &_inbisible {
     pointer-events: none;

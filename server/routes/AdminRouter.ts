@@ -13,5 +13,7 @@ router.post('/user/balance/add', AuthMiddleware, AdminOnlyMiddleware, AdminContr
 router.post('/user/balance/sub', AuthMiddleware, AdminOnlyMiddleware, AdminController.subtractBalance);
 router.post('/user/ban', AuthMiddleware, AdminOnlyMiddleware, AdminController.banUser);
 router.post('/user/unban', AuthMiddleware, AdminOnlyMiddleware, AdminController.unbanUser);
+router.post('/skin/add', upload.single("file"), AuthMiddleware, AdminOnlyMiddleware, AdminController.addSkin);
+router.post('/skin/remove', AuthMiddleware, AdminOnlyMiddleware, AdminController.deleteSkin);
 
 export default router;

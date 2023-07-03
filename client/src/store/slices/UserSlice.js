@@ -28,7 +28,7 @@ export const loginUser = createAsyncThunk(
 				return responce.data;
 			}
 		} catch (error) {
-			return rejectWithValue(error.response.data.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
@@ -50,7 +50,7 @@ export const registerUser = createAsyncThunk(
 				}
 			);
 		} catch (error) {
-			return rejectWithValue(error.response.data.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
@@ -63,7 +63,7 @@ export const getLeaders = createAsyncThunk(
 			const leaders = await $api.get('/user/leaders');
 			return leaders.data;
 		} catch (error) {
-			return rejectWithValue(error.response.data.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
@@ -79,8 +79,7 @@ export const updateUser = createAsyncThunk(
 			);
 			dispatch(setUser(user.data));
 		} catch (error) {
-			console.log(error)
-			return rejectWithValue(error.response.data.message);
+			return rejectWithValue(error.response.data);
 		}
 	}
 );
