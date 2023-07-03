@@ -7,7 +7,7 @@ import bird_skin_2 from '../../assets/bird-skin-2.png';
 import fg from '../../assets/fg.png';
 import pipe from '../../assets/pipe.png';
 import topPipe from '../../assets/top-pipe.png';
-import {updateUser} from '../../store/slices/UserSlice';
+import {loginUser, updateUser} from '../../store/slices/UserSlice';
 import Bird from './Classes/Bird';
 import handleParticles from './Classes/Particles';
 import handlePipes, {handleCollision} from './Classes/Pipes';
@@ -16,6 +16,8 @@ import deathSound from '../../sounds/die.mp3';
 import scoreSound from '../../sounds/point.mp3';
 import {useSelector} from "react-redux";
 import {$api} from "../../api/api";
+import {getMySkins} from "../../store/slices/ShopSlice";
+import {getMySkinsSelector} from "../Shop/selectors/selectors";
 
 const CANVAS_WIDTH = 320;
 const CANVAS_HEIGHT = 400;
@@ -26,8 +28,6 @@ const BIRD_WIDTH = 40;
 const Game = () => {
 	const canvasRef = useRef(null);
 	const birdRef = useRef(null);
-	const bird_skin_1Ref = useRef(null);
-	const bird_skin_2Ref = useRef(null);
 	const topPipeRef = useRef(null);
 	const bottomPipeRef = useRef(null);
 	const bgRef = useRef(null);
@@ -38,18 +38,16 @@ const Game = () => {
 	const [isStarted, setIsStarted] = useState(false);
 	const user = useSelector(state => state.user);
 	const serverUrl = $api.defaults.baseURL
-	const isSoundsAllowed =
-		sessionStorage.getItem('isSoundsAllowed') === 'true' ? true : false;
 	const [skin, setSkin] = useState(
 		user.settings.selectedSkinId || 1
 	);
+
+	const skinPath = useSelector(getMySkinsSelector)?.find((item) => item.id === skin)?.imageURL
 	const dispatch = useDispatch();
 	const jwt = localStorage.getItem('jwt');
-	const score = sessionStorage.getItem('score') || 0;
+	const score = user.score
 
-	const onChangeSkinClick = (e) => {
-		setSkin(e.target.classList[0]);
-	};
+
 
 	const toggleGame = (e) => {
 		setIsStarted(!isStarted);
@@ -57,26 +55,19 @@ const Game = () => {
 	};
 
 	useEffect(() => {
+		dispatch(getMySkins())
+		dispatch(loginUser({jwt: localStorage.getItem("jwt")}))
+	}, []);
+
+	useEffect(() => {
+		dispatch(loginUser({jwt: localStorage.getItem("jwt")}))
 		const cvs = canvasRef.current;
 		const ctx = cvs.getContext('2d');
 		// ЗАДНИЙ ФОН
 		const bgI = bgRef.current;
 		// ПТИЦА
 		const birdI = birdRef.current;
-		// ПТИЦА СКИН 1
-		const bird_skin_1I = bird_skin_1Ref.current;
-		// ПТИЦА СКИН 2
-		const bird_skin_2I = bird_skin_2Ref.current;
-		// КОНЕЧНЫЙ СКИН
-		let game_skin;
-		const skinId = user.settings.selectedSkinId;
-		if (skinId === 1) {
-			game_skin = birdI;
-		} else if (skinId === 2) {
-			game_skin = bird_skin_1I;
-		} else if (skinId === 3) {
-			game_skin = bird_skin_2I;
-		}
+
 		// ТРУБА ВЕРХНЯЯ
 		const pipeTopI = topPipeRef.current;
 		// ТРУБА НИЖНЯЯ
@@ -89,14 +80,14 @@ const Game = () => {
 		let deathSoundMP;
 		// ЗВУК ПОИНТА
 		let scoreSoundMP;
-		if (isSoundsAllowed) {
+		if (user.settings.sounds) {
 			deathSoundMP = deathSoundRef.current;
 			scoreSoundMP = scoreSoundRef.current;
 		}
 
 		const bird = new Bird(
 			ctx,
-			game_skin,
+			birdI,
 			CANVAS_HEIGHT,
 			CANVAS_WIDTH,
 			BIRD_HEIGHT,
@@ -186,32 +177,25 @@ const Game = () => {
 				width={CANVAS_WIDTH}
 				height={CANVAS_HEIGHT}
 			></canvas>
-			<button
-				className={`button button_default game__button ${
-					!isPaused && 'game__button_invisible'
-				}`}
-				onClick={toggleGame}
-			>
-				Начать заново
-			</button>
+			<div className={`after_game_menu ${!isPaused && 'after_game_menu_inbisible'}`}>
+				<span className={'score'}>Счет {window.GAME_SCORE}</span>
+				<span className={'best'}>Лучший счет {score}</span>
+				<span className={'earn'}>Заработано {window.GAME_SCORE}$</span>
+				<button
+					className={`button button_default game__button ${
+						!isPaused && 'game__button_invisible'
+					}`}
+					onClick={toggleGame}
+				>
+					Начать заново
+				</button>
+			</div>
 			<div className={`game__skins game__skins_inactive`}>
 				<img
 					ref={birdRef}
 					className={`standart game__skin`}
-					src={bird}
+					src={`${serverUrl}${skinPath}`}
 					alt='скин стандартный'
-				/>
-				<img
-					ref={bird_skin_1Ref}
-					className={`skin_1 game__skin`}
-					src={bird_skin_1}
-					alt='скин 1'
-				/>
-				<img
-					ref={bird_skin_2Ref}
-					className={`skin_2 game__skin`}
-					src={bird_skin_2}
-					alt='скин 2'
 				/>
 			</div>
 			<img ref={topPipeRef} src={topPipe} className='game__img' alt='птица'/>

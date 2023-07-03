@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from 'express';
 import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
-import {PrismaClient} from "@prisma/client";
+import {PrismaClient, Theme} from "@prisma/client";
 import ApiError from '../error/ApiError';
 import dotenv from 'dotenv';
 import {AuthenticatedRequest} from "../middleware/AuthMiddleware";
@@ -40,6 +40,11 @@ class UserController {
         settings: {
           create: {
             selectedSkinId: 1,
+            skins: {
+              connect: {
+                id: 1
+              }
+            }
           }
         },
         leaderboardScores: {
@@ -97,6 +102,12 @@ class UserController {
         settings: true,
       }
     });
+    const settings = await prisma.userSettings.findUnique({
+      where: {
+        userId: user?.id
+      }
+    })
+    await prisma.$disconnect()
     return res.json({user});
   }
 
@@ -121,7 +132,7 @@ class UserController {
 
 
   async updateUser(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-    const {score, username, skinId} = req.body;
+    const {score, username, skinId, sounds, theme} = req.body;
     const prisma = new PrismaClient();
     const user = await prisma.user.findUnique({where: {email: req.user?.email}});
     if (!user) {
@@ -133,17 +144,28 @@ class UserController {
       return next(ApiError.badRequest('Пользователя с такой почтой не существует.'));
     }
 
-
-    if (score && score > userScore?.score) {
-      await prisma.leaderboardScore.update({
-        where: {
-          userId: user.id,
-        }, data: {
-          score: +score,
+    if (theme) {
+      await prisma.userSettings.update({
+        where: {userId: user.id}, data: {
+          theme: {set: theme as Theme}
         }
       })
+    }
+
+    if (score) {
+      if (score > userScore?.score) {
+        await prisma.leaderboardScore.update({
+          where: {
+            userId: user.id,
+          }, data: {
+            score: +score,
+          }
+        })
+      }
       await prisma.user.update(({where: {email: user.email}, data: {coins: user.coins + score}}))
     }
+
+
     if (username) {
       await prisma.user.update({
         where: {
@@ -154,6 +176,7 @@ class UserController {
         }
       })
     }
+
     if (skinId) {
       await prisma.userSettings.update({
         where: {userId: user.id}, data: {
@@ -161,6 +184,16 @@ class UserController {
         }
       })
     }
+
+    if (sounds !== undefined) {
+      await prisma.userSettings.update({
+        where: {userId: user.id},
+        data: {
+          sounds: Boolean(sounds)
+        }
+      })
+    }
+
     const userReturn = await prisma.user.findUnique({
       where: {email: req.user?.email},
       include: {

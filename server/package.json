@@ -9,7 +9,8 @@
     "docker:start": "docker-compose up",
     "docker:stop": "docker-compose down",
     "docker:build": "docker-compose build",
-    "db:migrate": "yarn prisma migrate dev --name update_user"
+    "db:migrate": "yarn prisma migrate dev --name update_user",
+    "db:generate": "yarn prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.16.1",

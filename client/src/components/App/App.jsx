@@ -9,7 +9,7 @@ import Main from '../Main/Main';
 import RequireAuth from '../../hoc/RequireAuth';
 import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux/es/exports';
-import {loginUser} from '../../store/slices/UserSlice';
+import {loginUser, updateUser} from '../../store/slices/UserSlice';
 import LeaderboardContainer from '../LeaderboardContainer/LeaderboardContainer';
 import IsAlreadyAuth from '../../hoc/AlreadyAuth';
 import Settings from '../Settings/Settings';
@@ -17,12 +17,15 @@ import {removeUser} from '../../store/slices/UserSlice';
 import Game from '../Game/Game';
 import ShopPage from "../Shop/ShopPage";
 import {ToastContainer} from "react-toastify";
+import {useSelector} from "react-redux";
+import Admin from "../Admin/Admin";
 
 function App() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const userTheme = useSelector(state => state.user.settings.theme)
 	const [theme, setTheme] = useState(
-		sessionStorage.getItem('theme') || 'light'
+		userTheme
 	);
 
 	useEffect(() => {
@@ -34,14 +37,10 @@ function App() {
 		}
 	}, []);
 
-	const onChangeThemeClick = () => {
-		if (theme === 'light') {
-			setTheme('dark');
-			sessionStorage.setItem('theme', 'dark');
-		} else if (theme === 'dark') {
-			setTheme('light');
-			sessionStorage.setItem('theme', 'light');
-		}
+	const onChangeThemeClick = (event) => {
+		const newTheme = event.target.id;
+		dispatch(updateUser({theme: newTheme}))
+		setTheme(newTheme)
 	};
 
 	const onLogoutClick = () => {
@@ -60,6 +59,14 @@ function App() {
 					element={
 						<RequireAuth>
 							<Main/>
+						</RequireAuth>
+					}
+				/>
+				<Route
+					path='/admin'
+					element={
+						<RequireAuth>
+							<Admin/>
 						</RequireAuth>
 					}
 				/>

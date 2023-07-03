@@ -48,7 +48,7 @@
     border-radius: 4px;
     max-width: 1280px;
   }
-  &_dark {
+  &_DARK {
     background-color: $dark-background;
     color: $dark-text;
     .header {
@@ -82,7 +82,7 @@
     .input {
     }
   }
-  &_light {
+  &_LIGHT {
     .container {
       border: 1px solid rgba(0, 0, 0, 0.12);
     }

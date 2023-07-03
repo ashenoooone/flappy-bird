@@ -15,7 +15,6 @@ const ShopPage = () => {
 	const skinsToBuy = useSelector(getSkinsToBuy)
 	const balance = useSelector(state => state.user.coins)
 	const user = useSelector(state => state.user)
-	console.log(user)
 
 	useEffect(() => {
 		dispatch(loginUser({jwt: localStorage.getItem("jwt")}))

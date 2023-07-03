@@ -17,15 +17,23 @@ model User {
   settings          UserSettings?
   leaderboardScores LeaderboardScore[]
   coins             Int                @default(0)
+  isBanned          Boolean            @default(false)
 }
 
 model UserSettings {
   id             Int @id @default(autoincrement())
   selectedSkinId Int
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId Int    @unique
-  skins  Skin[] @relation("UserSettingsToSkin")
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int     @unique
+  skins  Skin[]  @relation("UserSettingsToSkin")
+  sounds Boolean @default(true)
+  theme  Theme   @default(LIGHT)
+}
+
+enum Theme {
+  DARK
+  LIGHT
 }
 
 enum UserRole {

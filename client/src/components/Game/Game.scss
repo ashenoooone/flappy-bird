@@ -1,3 +1,31 @@
+.after_game_menu {
+  &_inbisible {
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  position: absolute;
+  bottom: 50%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  background: white;
+  padding: 10px;
+  border-radius: 6px;
+  width: 300px;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 20px;
+
+  .best {
+
+  }
+
+  .earn {
+    color: green;
+  }
+}
+
 .game {
   display: flex;
   align-items: center;
@@ -5,27 +33,32 @@
   gap: 20px;
   flex-direction: column;
   position: relative;
+
   &__img {
     display: none;
     width: 100px;
     height: 100px;
   }
+
   &__button {
-    position: absolute;
-    top: 300px;
+
     &_invisible {
       display: none;
     }
   }
+
   &__skins {
     &_inactive {
       display: none;
     }
+
     display: flex;
     gap: 5px;
   }
+
   &__skin {
     max-width: 100px;
+
     &_active {
       outline: 4px solid greenyellow;
     }

@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {$api} from '../../api/api'
+import {toast} from "react-toastify";
 
 
 // LOGIN
@@ -94,7 +95,8 @@ const initialState = {
 	isLoading: false,
 	error: '',
 	leaders: [],
-	settings: {}
+	settings: {},
+	userRole: ''
 }
 
 const UserSlice = createSlice({
@@ -109,11 +111,11 @@ const UserSlice = createSlice({
 		},
 		setUser(state, action) {
 			const {user} = action.payload;
-			console.log(user)
 			state.username = user.username;
 			state.email = user.email;
 			state.score = user.leaderboardScores[0].score;
 			state.settings = user.settings;
+			state.userRole = user.userRole;
 			state.coins = user.coins;
 			state.isLoading = false;
 			state.error = '';
